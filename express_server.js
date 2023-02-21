@@ -3,6 +3,17 @@ const app = express();
 const PORT = 8080; // default port 8080
 
 
+
+
+//to short url
+const generateRandomString = () => {
+  let output = Math.random().toString(36).replace(/[^a-z+0-9]+/g, '').substr(0, 6);
+  return output;
+};
+
+
+
+
 //translate body
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,7 +53,7 @@ app.get("/urls/new", (req, res) => {
 //get data from the form in body and translate it
 app.post("/urls", (req, res) => {
   console.log(req.body); // Log the POST request body to the console
-  res.send("ok"); // Respond with 'Ok' (we will replace this)
+  res.send(generateRandomString()); // Respond with 'Ok' (we will replace this)
 });
 
 
