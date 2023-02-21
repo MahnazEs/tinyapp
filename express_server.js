@@ -28,8 +28,6 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-
-
 //sending deta to urls_index.ejs , http://localhost:8080/urls
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
@@ -49,11 +47,18 @@ app.get("/urls/new", (req, res) => {
 });
 
 
-
 //get data from the form in body and translate it
 app.post("/urls", (req, res) => {
-  console.log(req.body); // Log the POST request body to the console
-  res.send(generateRandomString()); // Respond with 'Ok' (we will replace this)
+  console.log(req.body);
+
+  const longUrl = req.body.longURL; // Log the POST request body to the console
+  const shortUrl = generateRandomString();
+
+  urlDatabase[shortUrl] = longUrl;
+  console.log(urlDatabase);
+  console.log("short url: ", shortUrl);
+  res.redirect('/urls');
+  //res.send("ok"); // Respond with 'Ok' (we will replace this)
 });
 
 
