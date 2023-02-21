@@ -27,6 +27,13 @@ app.get("/hello", (req, res) => {
 });
 
 
+//sending data to urls_show.ejs
+app.get("/urls/:id", (req, res) => {
+  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]/* What goes here? */ };
+  res.render("urls_show", templateVars);
+});
+
+
 
 //http://localhost:8080/
 app.get("/", (req, res) => {
