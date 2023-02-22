@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
-
+const cookieParser = require("cookie-parser");
 
 
 
@@ -14,13 +14,14 @@ const generateRandomString = () => {
 
 
 
-//translate body
+//middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cookieParser());
 
-
-
-//set ejs
+//config
 app.set("view engine", "ejs");
+
 
 
 const urlDatabase = {
@@ -28,9 +29,13 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+
 //sending deta to urls_index.ejs , http://localhost:8080/urls
 app.get("/urls", (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = {
+    urls: urlDatabase,
+    username: req.cookies["username"]
+  };
   res.render("urls_index", templateVars);
 });
 
@@ -48,29 +53,34 @@ app.get("/hello", (req, res) => {
 
 //render urls_new.ejs
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  const templateVars = { username: req.cookies["username"] };
+  res.render("urls_new", templateVars);
 });
 
 
 //get data from the form in body and translate it
 app.post("/urls", (req, res) => {
   console.log(req.body);
-
-  const longUrl = req.body.longURL; // Log the POST request body to the console
+  const longUrl = req.body.longURL;
   const shortUrl = generateRandomString();
-
   urlDatabase[shortUrl] = longUrl;
   res.redirect(`/urls/${shortUrl}`);
-  //res.redirect('/urls');
-  //res.send("ok"); // Respond with 'Ok' (we will replace this)
 });
 
 
 
 //sending data to urls_show.ejs
 app.get("/urls/:id", (req, res) => {
-  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]/* What goes here? */ };
-  res.render("urls_show", templateVars);
+  const templateVars = {
+    id: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    username: req.cookies["username"]
+  };
+  if (urlDatabase[req.params.id]) {
+    res.render("urls_show", templateVars);
+  } else {
+    res.render("urls_new");
+  }
 });
 
 
@@ -102,6 +112,14 @@ app.post("/urls/:id", (req, res) => {
 app.post("/login", (req, res) => {
   let cookie = req.body.username;
   res.cookie("username", cookie);
+  res.redirect("/urls");
+});
+
+
+
+//logout
+app.post("/logout", (req, res) => {
+  res.clearCookie("username");
   res.redirect("/urls");
 });
 
