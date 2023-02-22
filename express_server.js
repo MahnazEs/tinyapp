@@ -98,6 +98,17 @@ app.post("/urls/:id", (req, res) => {
 });
 
 
+//login
+app.post("/login", (req, res) => {
+  let cookie = req.body.username;
+  res.cookie("username", cookie);
+  res.redirect("/urls");
+});
+
+
+
+
+
 
 
 //http://localhost:8080/
