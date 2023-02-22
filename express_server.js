@@ -34,11 +34,16 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+
+
+
 //sending deta to hello_world.ejs , http://localhost:8080/hello
 app.get("/hello", (req, res) => {
   const templateVars = { greeting: "Hello World!" };
   res.render("hello_world", templateVars);
 });
+
+
 
 
 //render urls_new.ejs
@@ -68,6 +73,20 @@ app.post("/urls", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]/* What goes here? */ };
   res.render("urls_show", templateVars);
+});
+
+
+//shortener /urls/:id
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
+});
+
+
+//delete url
+app.post("/urls/:id/delete", (req,res)=>{
+  delete urlDatabase[req.params.id];
+  res.redirect("/urls");
 });
 
 
