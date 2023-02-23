@@ -17,12 +17,11 @@
               <label>Longed in as: <%= username %></label>
               <button type="submit"> Logout </button>
             </form>
-            <% } else { %>
+            <% }  else { %>
               <form method="POST" action="/login">
                 <label>Username</label>
                 <input type="text" name="username">
                 <button type="submit"> Login </button>
-                <h4>Your are: <%= username %>
                 </h4>
               </form>
               <% } %>
