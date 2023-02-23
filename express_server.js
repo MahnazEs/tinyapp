@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
-
+const cookieParser = require("cookie-parser");
 
 
 
@@ -14,12 +14,12 @@ const generateRandomString = () => {
 
 
 
-//translate body
+//middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cookieParser());
 
-
-
-//set ejs
+//config
 app.set("view engine", "ejs");
 
 
@@ -69,7 +69,7 @@ app.post("/urls", (req, res) => {
 
 //sending data to urls_show.ejs
 app.get("/urls/:id", (req, res) => {
-  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id]/* What goes here? */ };
+  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
 });
 
@@ -120,6 +120,15 @@ app.get("/hello", (req, res) => {
 
 
 
+//register
+app.get("/register", (req, res) => {
+  /* const templateVars = {
+    shortURL: req.params.id,
+    longUrl: urlDatabase[req.params.id],
+    username: req.cookies["username"]
+  }; */
+  res.render("register");
+});
 
 
 
@@ -134,12 +143,3 @@ app.listen(PORT, () => {
 
 
 
-
-/* app.get("/set", (req, res) => {
-  const a = 1;
-  res.send(`a = ${a}`);
- });
- 
- app.get("/fetch", (req, res) => {
-  res.send(`a = ${a}`);
- }); */
