@@ -125,6 +125,18 @@ app.post("/logout", (req, res) => {
 
 
 
+//register
+app.get("/register", (req, res) => {
+  /* const templateVars = {
+    shortURL: req.params.id,
+    longUrl: urlDatabase[req.params.id],
+    username: req.cookies["username"]
+  }; */
+  res.render("register");
+});
+
+
+
 
 
 
