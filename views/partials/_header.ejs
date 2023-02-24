@@ -11,25 +11,27 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
 
 
-        <td>
-          <% if(username){ %>
-            <form method="POST" action="/logout">
-              <label>Longed in as: <%= username %></label>
-              <button type="submit"> Logout </button>
+          <% if (userObject) { %>
+            <form action="/logout" method="POST">
+              <h6 align="center">
+                <label for="email">User Email: </label>
+                <%= userObject.email %>
+                <br>
+                <button type="submit" class="btn btn-primary">Logout</button>
+              </h6>
             </form>
-            <% }  else { %>
-              <form method="POST" action="/login">
-                <label>Username</label>
-                <input type="text" name="username">
-                <button type="submit"> Login </button>
-                </h4>
-              </form>
-              <% } %>
-        </td>
-
-
-
+          <% } else { %>
+          <form action="/login" method="POST">
+            <h6 align="center">
+              <a href="/register"<button class="btn btn-primary">Register</button></a>
+              <a href="/login"<button class="btn btn-primary">Login</button></a>
+          <% } %>
+          </div>
+          </form>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+
+
+
 </header>
