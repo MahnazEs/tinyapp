@@ -4,8 +4,11 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-!["screenshot description"](#)
-!["screenshot description"](#)
+![\\wsl.localhost\LHL\home\labber\.ssh\tinyapp\docs\login_page.png](#)
+![\\wsl.localhost\LHL\home\labber\.ssh\tinyapp\docs\register_page.png](#)
+![\\wsl.localhost\LHL\home\labber\.ssh\tinyapp\docs\urls_main_page.png](#)
+![\\wsl.localhost\LHL\home\labber\.ssh\tinyapp\docs\urls_new_page.png](#)
+![\\wsl.localhost\LHL\home\labber\.ssh\tinyapp\docs\urls_edit_page.png](#)
 
 ## Dependencies
 
@@ -35,13 +38,13 @@ a link to the registration page (/register)
 
 ## Route Checklist
 
-- GET /
+- GET /.
 if user is logged in:
 (Minor) redirect to /urls
 if user is not logged in:
 (Minor) redirect to /login
 
-- GET /urls
+- GET /urls.
 if user is logged in:
 returns HTML with:
 the site header (see Display Requirements above)
@@ -58,7 +61,7 @@ a delete button which makes a POST request to /urls/:id/delete
 if user is not logged in:
 returns HTML with a relevant error message
 
-- GET /urls/new
+- GET /urls/new.
 if user is logged in:
 returns HTML with:
 the site header (see Display Requirements above)
@@ -68,7 +71,7 @@ a submit button which makes a POST request to /urls
 if user is not logged in:
 redirects to the /login page
 
-- GET /urls/:id
+- GET /urls/:id.
 if user is logged in and owns the URL for the given ID:
 returns HTML with:
 the site header (see Display Requirements above)
@@ -86,20 +89,20 @@ returns HTML with a relevant error message
 if user is logged it but does not own the URL with the given ID:
 returns HTML with a relevant error message
 
-- GET /u/:id
+- GET /u/:id.
 if URL for the given ID exists:
 redirects to the corresponding long URL
 if URL for the given ID does not exist:
 (Minor) returns HTML with a relevant error message
 
-- POST /urls
+- POST /urls.
 if user is logged in:
 generates a short URL, saves it, and associates it with the user
 redirects to /urls/:id, where :id matches the ID of the newly saved URL
 if user is not logged in:
 (Minor) returns HTML with a relevant error message
 
-- POST /urls/:id
+- POST /urls/:id.
 if user is logged in and owns the URL for the given ID:
 updates the URL
 redirects to /urls
@@ -108,7 +111,7 @@ if user is not logged in:
 if user is logged it but does not own the URL for the given ID:
 (Minor) returns HTML with a relevant error message
 
-- POST /urls/:id/delete
+- POST /urls/:id/delete.
 if user is logged in and owns the URL for the given ID:
 deletes the URL
 redirects to /urls
@@ -117,7 +120,7 @@ if user is not logged in:
 if user is logged it but does not own the URL for the given ID:
 (Minor) returns HTML with a relevant error message
 
-- GET /login
+- GET /login.
 if user is logged in:
 (Minor) redirects to /urls
 if user is not logged in:
@@ -126,7 +129,7 @@ a form which contains:
 input fields for email and password
 submit button that makes a POST request to /login
 
-- GET /register
+- GET /register.
 if user is logged in:
 (Minor) redirects to /urls
 if user is not logged in:
@@ -135,14 +138,14 @@ a form which contains:
 input fields for email and password
 a register button that makes a POST request to /register
 
-- POST /login
+- POST /login.
 if email and password params match an existing user:
 sets a cookie
 redirects to /urls
 if email and password params don't match an existing user:
 returns HTML with a relevant error message
 
-- POST /register
+- POST /register.
 if email or password are empty:
 returns HTML with a relevant error message
 if email already exists:
@@ -153,6 +156,6 @@ encrypts the new user's password with bcrypt
 sets a cookie
 redirects to /urls
 
-- POST /logout
+- POST /logout.
 deletes cookie
 redirects to /login
