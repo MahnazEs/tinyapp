@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+const bcrypt = require("bcryptjs");
 
 //config
 app.set("view engine", "ejs");
@@ -66,7 +67,7 @@ const users = {
 app.get("/urls", (req, res) => {
   let user_id = req.cookies.id;
   let templateVars = {
-    user_id: user_id,
+    user_id,
     user: users[user_id],
     urlDatabase: urlsForUser(user_id)
   };
@@ -82,10 +83,10 @@ app.get("/urls", (req, res) => {
 app.get("/urls/new", (req, res) => {
   let user_id = req.cookies.id;
   if (user_id) {
-    let templateVars = { user_id: user_id, user: users[user_id] };
+    let templateVars = { user_id, user: users[user_id] };
       res.render("urls_new", templateVars);
     } else {
-      res.redirect("/login");
+      res.redirect("/urls_login");
     };
 });
 
@@ -110,9 +111,10 @@ app.post("/urls", (req, res) => {
 });
 
 
+
 //sending data to urls_show.ejs
 app.get("/urls/:shortURL", (req, res) => {
-  let user_id = req.cookies.user_id;
+  let user_id = req.cookies.id;
   let shortURL = req.params.shortURL;
   let templateVars = {
   shortURL: shortURL,
@@ -158,7 +160,22 @@ app.post("/urls/:id", (req, res) => {
   res.redirect("/urls");
 });
 
+app.post("/urls/:shortURL", (req, res) => {
+  let shortURL = req.params.id;
+  if (!req.cookies["user_id"]) {
+    res.redirect("/urls");
+  } else if (urlDatabase[shortURL].user_id === req.cookies["user_id"]) {
+    urlDatabase[req.params.id].longURL = req.body.longURL;
+    res.redirect("/urls");
+  } else {
+    res.redirect("/urls");
+  }
+});
+
 ////////////////////////////////////
+
+
+
 
 //login
 app.get("/login", (req, res) => {
@@ -177,10 +194,9 @@ app.post("/login", (req, res) => {
   if (!userObject) {
     res.status(403).send("Username not found. Please register")
   }
-  if (userObject) {
-    if (userObject.password !== password) {
-      res.status(403).send("Username or password do not match.");
-    };
+  if (!bcrypt.compareSync(password, userObject.password)) {
+    res.status(403).send("Username or password do not match.");
+  } else {
     res.cookie("id", userObject["id"]);
     res.redirect("/urls");
   }
@@ -197,6 +213,14 @@ app.post("/logout", (req, res) => {
 
 
 
+
+
+
+
+
+
+
+
 //register
 app.get("/register", (req, res) => {
   res.render("register", {user: users[req.cookies.user_id]});
@@ -204,23 +228,24 @@ app.get("/register", (req, res) => {
 
 
 app.post("/register", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
   const id = generateRandomString();
+  let { email, password } = req.body;
+  let hashpassword = bcrypt.hashSync(password, 10);
   let newUser = {
     id,
-    email,
-    password
+    email,  
+    password: hashpassword
   };
   if (!req.body.email || !req.body.password) {
     res.status(400).send("Please enter username or password.");
-  }
+  };
   if (getUserByEmail(email)) {
-    res.status(400).send("User already exists.");
-  }
+      res.status(400).send("Please login.");
+  } else {
   users[id] = newUser;
   res.cookie("id", id)
   res.redirect("/urls");
+  };
 });
 
 
